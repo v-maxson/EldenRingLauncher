@@ -6,6 +6,7 @@
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_sdlrenderer.h>
 #include <Windows.h>
+#include <thread>
 
 
 constexpr const char* WINDOW_TITLE = "Elden Ring Launcher";
@@ -168,6 +169,9 @@ void Gui::Render() noexcept {
                 } break;
             }
         }
+        else {
+            g_shouldLoop = false;
+        }
     }
 
     ImGui::Separator();
@@ -186,25 +190,28 @@ void Gui::Render() noexcept {
         // An error occured.
         if ((INT_PTR)result < 32) {
             switch ((INT_PTR)result) {
-            case ERROR_FILE_NOT_FOUND:
-            case ERROR_PATH_NOT_FOUND: {
-                SDL_ShowSimpleMessageBox(
-                    SDL_MESSAGEBOX_ERROR,
-                    "Elden Ring Launcher Error",
-                    "Could not find eldenring.exe",
-                    g_window
-                );
-            } break;
+                case ERROR_FILE_NOT_FOUND:
+                case ERROR_PATH_NOT_FOUND: {
+                    SDL_ShowSimpleMessageBox(
+                        SDL_MESSAGEBOX_ERROR,
+                        "Elden Ring Launcher Error",
+                        "Could not find eldenring.exe",
+                        g_window
+                    );
+                } break;
 
-            default: {
-                SDL_ShowSimpleMessageBox(
-                    SDL_MESSAGEBOX_ERROR,
-                    "Elden Ring Launcher Error",
-                    "An error occured while trying to launch Elden Ring in offline mode.\n\nThis may be due to missing permissions.",
-                    g_window
-                );
-            } break;
+                default: {
+                    SDL_ShowSimpleMessageBox(
+                        SDL_MESSAGEBOX_ERROR,
+                        "Elden Ring Launcher Error",
+                        "An error occured while trying to launch Elden Ring in offline mode.\n\nThis may be due to missing permissions.",
+                        g_window
+                    );
+                } break;
             }
+        }
+        else {
+            g_shouldLoop = false;
         }
     }
 
@@ -232,6 +239,8 @@ void Gui::Run() {
         Gui::BeginRender();
         Gui::Render();
         Gui::EndRender();
+        
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 
     Gui::DestroyImGui();
