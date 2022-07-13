@@ -5,6 +5,7 @@
 #include <imgui.h>
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_sdlrenderer.h>
+#include <Windows.h>
 
 
 constexpr const char* WINDOW_TITLE = "Elden Ring Launcher";
@@ -14,6 +15,8 @@ constexpr SDL_WindowFlags WINDOW_FLAGS = (SDL_WindowFlags)(
     SDL_WINDOW_ALLOW_HIGHDPI 
     | SDL_WINDOW_BORDERLESS
     );
+
+constexpr const char* ER_LAUNCH_OPTIONS = "-eac-nop-loaded";
 
 constexpr SDL_RendererFlags RENDERER_FLAGS = (SDL_RendererFlags)(
     SDL_RENDERER_ACCELERATED
@@ -132,12 +135,77 @@ void Gui::Render() noexcept {
 
     if (ImGui::Button("Start Online", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 2) - 35))) {
         // Launch the original start_protected_game.exe
+        // It should now be called start_protected_game_original.exe
+        HINSTANCE result = ShellExecute(
+            nullptr,
+            nullptr,
+            "start_protected_game_original.exe",
+            nullptr,
+            nullptr,
+            0
+        );
+
+        // An error occured.
+        if ((INT_PTR)result < 32) {
+            switch ((INT_PTR)result) {
+                case ERROR_FILE_NOT_FOUND:
+                case ERROR_PATH_NOT_FOUND: {
+                    SDL_ShowSimpleMessageBox(
+                        SDL_MESSAGEBOX_ERROR,
+                        "Elden Ring Launcher Error",
+                        "Could not find start_protected_game_original.exe",
+                        g_window
+                    );
+                } break;
+
+                default: {
+                    SDL_ShowSimpleMessageBox(
+                        SDL_MESSAGEBOX_ERROR,
+                        "Elden Ring Launcher Error",
+                        "An error occured while trying to launch Elden Ring in online mode.\n\nThis may be due to missing permissions.",
+                        g_window
+                    );
+                } break;
+            }
+        }
     }
 
     ImGui::Separator();
 
     if (ImGui::Button("Start Offline", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 2) - 35))) {
         // Launch eldenring.exe directly.
+        HINSTANCE result = ShellExecute(
+            nullptr,
+            nullptr,
+            "eldenring.exe",
+            ER_LAUNCH_OPTIONS,
+            nullptr,
+            0
+        );
+
+        // An error occured.
+        if ((INT_PTR)result < 32) {
+            switch ((INT_PTR)result) {
+            case ERROR_FILE_NOT_FOUND:
+            case ERROR_PATH_NOT_FOUND: {
+                SDL_ShowSimpleMessageBox(
+                    SDL_MESSAGEBOX_ERROR,
+                    "Elden Ring Launcher Error",
+                    "Could not find eldenring.exe",
+                    g_window
+                );
+            } break;
+
+            default: {
+                SDL_ShowSimpleMessageBox(
+                    SDL_MESSAGEBOX_ERROR,
+                    "Elden Ring Launcher Error",
+                    "An error occured while trying to launch Elden Ring in offline mode.\n\nThis may be due to missing permissions.",
+                    g_window
+                );
+            } break;
+            }
+        }
     }
 
     ImGui::End();
