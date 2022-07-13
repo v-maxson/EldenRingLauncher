@@ -5,7 +5,7 @@ A simple utility to launch Elden Ring with or without anti-cheat.
 If you are not comfortable with this, you are welcome to build the project yourself without it being boxed.
 
 ## Installation
-1. Download the latest [release](https://github.com/v-maxson/EldenRingLauncher/releases).
+1. Download the latest [release](https://github.com/v-maxson/EldenRingLauncher/releases/latest).
 2. Navigate to your Elden Ring installation directory (right click the game on Steam > `Manage` > `Browse Local Files`)
    and navigate into the `Game` folder.
 3. Rename the existing `start_protected_game.exe` to `start_protected_game_original.exe`.
