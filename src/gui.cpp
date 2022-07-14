@@ -7,7 +7,7 @@
 #include <imgui_impl_sdlrenderer.h>
 #include <Windows.h>
 #include <thread>
-
+using namespace std::literals::chrono_literals;
 
 constexpr const char* WINDOW_TITLE = "Elden Ring Launcher";
 constexpr unsigned int WINDOW_WIDTH = 300;
@@ -25,11 +25,12 @@ constexpr SDL_RendererFlags RENDERER_FLAGS = (SDL_RendererFlags)(
 
 static bool g_sdlInitialized = false;
 static bool g_imguiInitialized = false;
+static bool g_shouldLoop = true;
 
 static SDL_Window* g_window = nullptr;
 static SDL_Renderer* g_renderer = nullptr;
 
-bool Gui::InitializeSDL() noexcept {
+bool InitializeSDL() noexcept {
     // Initialize SDL Window
     if (SDL_Init(SDL_INIT_VIDEO) != 0)
         return false;
@@ -69,7 +70,7 @@ bool Gui::InitializeSDL() noexcept {
     return true;
 }
 
-bool Gui::InitializeImGui() noexcept {
+bool InitializeImGui() noexcept {
     // SDL must be initialized.
     if (!g_sdlInitialized)
         return false;
@@ -90,7 +91,7 @@ bool Gui::InitializeImGui() noexcept {
         return false;
 }
 
-void Gui::DestroySDL() noexcept {
+void DestroySDL() noexcept {
     if (!g_sdlInitialized)
         return;
 
@@ -99,7 +100,7 @@ void Gui::DestroySDL() noexcept {
     SDL_Quit();
 }
 
-void Gui::DestroyImGui() noexcept {
+void DestroyImGui() noexcept {
     if (!g_imguiInitialized)
         return;
 
@@ -108,28 +109,27 @@ void Gui::DestroyImGui() noexcept {
     ImGui::DestroyContext();
 }
 
-void Gui::BeginRender() noexcept {
+void BeginRender() noexcept {
     ImGui_ImplSDL2_NewFrame();
     ImGui_ImplSDLRenderer_NewFrame();
     ImGui::NewFrame();
 }
 
-void Gui::EndRender() noexcept {
+void EndRender() noexcept {
     ImGui::Render();
     SDL_RenderClear(g_renderer);
     ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
     SDL_RenderPresent(g_renderer);
 }
 
-void Gui::Render() noexcept {
+void Render() noexcept {
     ImGui::SetNextWindowPos({ 0, 0 });
     ImGui::SetNextWindowSize({ WINDOW_WIDTH, WINDOW_HEIGHT });
 
     ImGui::Begin(
         WINDOW_TITLE,
-        &Gui::g_shouldLoop,
-        ImGuiWindowFlags_NoSavedSettings 
-        | ImGuiWindowFlags_NoMove
+        &g_shouldLoop,
+        ImGuiWindowFlags_NoMove
         | ImGuiWindowFlags_NoResize
         | ImGuiWindowFlags_NoCollapse
     );
@@ -137,92 +137,73 @@ void Gui::Render() noexcept {
     if (ImGui::Button("Start Online", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 2) - 35))) {
         // Launch the original start_protected_game.exe
         // It should now be called start_protected_game_original.exe
-        HINSTANCE result = ShellExecute(
-            nullptr,
-            nullptr,
-            "start_protected_game_original.exe",
-            nullptr,
-            nullptr,
-            0
-        );
-
-        // An error occured.
-        if ((INT_PTR)result < 32) {
-            switch ((INT_PTR)result) {
-                case ERROR_FILE_NOT_FOUND:
-                case ERROR_PATH_NOT_FOUND: {
-                    SDL_ShowSimpleMessageBox(
-                        SDL_MESSAGEBOX_ERROR,
-                        "Elden Ring Launcher Error",
-                        "Could not find start_protected_game_original.exe",
-                        g_window
-                    );
-                } break;
-
-                default: {
-                    SDL_ShowSimpleMessageBox(
-                        SDL_MESSAGEBOX_ERROR,
-                        "Elden Ring Launcher Error",
-                        "An error occured while trying to launch Elden Ring in online mode.\n\nThis may be due to missing permissions.",
-                        g_window
-                    );
-                } break;
-            }
+        STARTUPINFOW sInfo{};
+        sInfo.cb = sizeof(sInfo);
+        ZeroMemory(&sInfo, sizeof(sInfo));
+        PROCESS_INFORMATION pInfo{};
+        ZeroMemory(&pInfo, sizeof(pInfo));
+        if (!CreateProcessW(
+            L"start_protected_game_original.exe",
+            nullptr, nullptr, nullptr, FALSE, 0, nullptr, nullptr,
+            &sInfo,
+            &pInfo
+        )) {
+            SDL_ShowSimpleMessageBox(
+                SDL_MESSAGEBOX_ERROR,
+                "Elden Ring Launcher Error",
+                "Could not launch start_protected_game_original.exe",
+                g_window
+            );
         }
-        else {
-            g_shouldLoop = false;
-        }
+
+        // Not interested in hProcess or hThread currently.
+        if (pInfo.hProcess) CloseHandle(pInfo.hProcess);
+        if (pInfo.hThread) CloseHandle(pInfo.hThread);
+        
+        // Close
+        g_shouldLoop = false;
     }
 
     ImGui::Separator();
 
     if (ImGui::Button("Start Offline", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 2) - 35))) {
         // Launch eldenring.exe directly.
-        HINSTANCE result = ShellExecute(
-            nullptr,
-            nullptr,
-            "eldenring.exe",
-            ER_LAUNCH_OPTIONS,
-            nullptr,
-            0
-        );
-
-        // An error occured.
-        if ((INT_PTR)result < 32) {
-            switch ((INT_PTR)result) {
-                case ERROR_FILE_NOT_FOUND:
-                case ERROR_PATH_NOT_FOUND: {
-                    SDL_ShowSimpleMessageBox(
-                        SDL_MESSAGEBOX_ERROR,
-                        "Elden Ring Launcher Error",
-                        "Could not find eldenring.exe",
-                        g_window
-                    );
-                } break;
-
-                default: {
-                    SDL_ShowSimpleMessageBox(
-                        SDL_MESSAGEBOX_ERROR,
-                        "Elden Ring Launcher Error",
-                        "An error occured while trying to launch Elden Ring in offline mode.\n\nThis may be due to missing permissions.",
-                        g_window
-                    );
-                } break;
-            }
+        STARTUPINFOW sInfo{};
+        sInfo.cb = sizeof(sInfo);
+        ZeroMemory(&sInfo, sizeof(sInfo));
+        PROCESS_INFORMATION pInfo{};
+        ZeroMemory(&pInfo, sizeof(pInfo));
+        if (!CreateProcessW(
+            L"eldenring.exe",
+            (wchar_t*)L"-eac-nop-loaded",
+            nullptr, nullptr, FALSE, 0, nullptr, nullptr,
+            &sInfo,
+            &pInfo
+        )) {
+            SDL_ShowSimpleMessageBox(
+                SDL_MESSAGEBOX_ERROR,
+                "Elden Ring Launcher Error",
+                "Could not launch eldenring.exe",
+                g_window
+            );
         }
-        else {
-            g_shouldLoop = false;
-        }
+
+        // Not interested in hProcess or hThread currently.
+        if (pInfo.hProcess) CloseHandle(pInfo.hProcess);
+        if (pInfo.hThread) CloseHandle(pInfo.hThread);
+
+        // Close
+        g_shouldLoop = false;
     }
 
     ImGui::End();
 }
 
 void Gui::Run() {
-    Gui::InitializeSDL();
-    Gui::InitializeImGui();
+    InitializeSDL();
+    InitializeImGui();
 
-    while (Gui::g_shouldLoop) {
+    while (g_shouldLoop) {
         SDL_Event evt;
         while (SDL_PollEvent(&evt)) {
             ImGui_ImplSDL2_ProcessEvent(&evt);
@@ -231,18 +212,18 @@ void Gui::Run() {
                 // Handle quiting.
                 // Note: This only applies to bordered windows.
                 case SDL_QUIT: {
-                    Gui::g_shouldLoop = false;
+                    g_shouldLoop = false;
                 } break;
             }
         }
 
-        Gui::BeginRender();
-        Gui::Render();
-        Gui::EndRender();
+        BeginRender();
+        Render();
+        EndRender();
         
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(50ms);
     }
 
-    Gui::DestroyImGui();
-    Gui::DestroySDL();
+    DestroyImGui();
+    DestroySDL();
 }
