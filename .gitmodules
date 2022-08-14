@@ -1,0 +1,10 @@
+[submodule "dependencies/SDL2"]
+	path = dependencies/SDL2
+	url = https://github.com/libsdl-org/SDL
+	branch = 2.0.22
+[submodule "dependencies/ImGui"]
+	path = dependencies/ImGui
+	url = https://github.com/ocornut/imgui
+[submodule "dependencies/tiny-process-library"]
+	path = dependencies/tiny-process-library
+	url = https://gitlab.com/eidheim/tiny-process-library
