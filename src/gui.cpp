@@ -1,4 +1,5 @@
 #include "gui.h"
+#include "gui_style.h"
 #include "app_version.h"
 
 #include <SDL.h>
@@ -7,6 +8,7 @@
 #include <imgui_impl_sdlrenderer.h>
 #include <process.hpp>
 #include <cstdint>
+#include <thread>
 #include <format>
 
 constexpr uint32_t SDL_INIT_FLAGS = (
@@ -30,10 +32,8 @@ constexpr SDL_RendererFlags RENDERER_FLAGS = (SDL_RendererFlags)(
 	| SDL_RENDERER_PRESENTVSYNC
 	);
 
-/**
- * \brief Attempts to initialize required SDL2 components.
- * \return A bool indicating whether or not initialization succeeded.
- */
+/// @brief Attempts to initialize required SDL2 components.
+///@return A bool indicating whether or not initialization succeeded.
 bool InitializeSDL() noexcept
 {
 	// Initialize required SDL subsystems.
@@ -77,10 +77,8 @@ bool InitializeSDL() noexcept
 	return true;
 }
 
-/**
- * \brief Attempts to initialize ImGui.
- * \return A bool indicating whether or not initialization succeeded.
- */
+/// @brief Attempts to initialize ImGui.
+/// @return A bool indicating whether or not initialization succeeded.
 bool InitializeImGui() noexcept
 {
 	IMGUI_CHECKVERSION();
@@ -95,12 +93,15 @@ bool InitializeImGui() noexcept
 	if (!ImGui_ImplSDLRenderer_Init(g_renderer))
 		return false;
 
+	Gui::StyleCustom();
+
+	// This is currently causing a segmentation fault when the program exits. 
+	//Gui::StyleFonts(); 
+
 	return true;
 }
 
-/**
- * \brief SDL Cleanup.
- */
+/// @brief SDL Cleanup.
 void DestroySDL() noexcept
 {
 	SDL_DestroyRenderer(g_renderer);
@@ -108,9 +109,7 @@ void DestroySDL() noexcept
 	SDL_Quit();
 }
 
-/**
- * \brief ImGui Cleanup.
- */
+/// @brief ImGui Cleanup.
 void DestroyImGui() noexcept
 {
 	ImGui_ImplSDLRenderer_Shutdown();
@@ -172,18 +171,13 @@ void Gui::Run()
 	{
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
-		{
 			ImGui_ImplSDL2_ProcessEvent(&event);
-
-			if (event.type == SDL_QUIT)
-			{
-				g_isOpen = false;
-			}
-		}
 
 		BeginRender();
 		Render();
 		EndRender();
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	}
 
 	DestroyImGui();

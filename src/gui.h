@@ -2,8 +2,6 @@
 
 namespace Gui
 {
-	/**
-	 * \brief Starts the GUI loop for this program.
-	 */
+	/// @brief Runs the GUI loop.
 	void Run();
 }
