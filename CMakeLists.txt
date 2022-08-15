@@ -49,8 +49,8 @@ configure_file(./src/app_version.h.in ${GENERATED_HEADERS}/app_version.h)
 include_directories(${GENERATED_HEADERS})
 
 #---- Compilation
-set(OUTPUT_NAME start_protected_game) 
 add_executable(${PROJECT_NAME} WIN32 ${SOURCE_FILES} ${IMGUI_SOURCE_FILES})
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "start_protected_game")
 
 #---- Linking
 target_link_libraries(${PROJECT_NAME} SDL2main SDL2-static tiny-process-library)
