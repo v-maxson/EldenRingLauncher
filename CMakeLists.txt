@@ -5,7 +5,6 @@ set(VERSION_MAJOR 2)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
 
-
 project(
 	EldenRingLauncher
 	LANGUAGES CXX
@@ -38,6 +37,9 @@ file(COPY ${IMGUI_HEADERS} DESTINATION ${GENERATED_HEADERS})
 #---- tiny-process-library
 add_subdirectory(./dependencies/tiny-process-library)
 include_directories(./dependencies/tiny-process-library)
+
+#---- Ruda Font
+include_directories(./dependencies/RudaFont/include)
 
 #---- Project Source
 file(GLOB_RECURSE SOURCE_FILES ./src/*.cpp ./src/*.h)
