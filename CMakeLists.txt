@@ -43,7 +43,13 @@ include_directories(./dependencies/RudaFont/include)
 
 #---- Project Source
 file(GLOB_RECURSE SOURCE_FILES ./src/*.cpp ./src/*.h)
-configure_file(./src/app_version.h.in ${GENERATED_HEADERS}/app_version.h)
+file(GLOB_RECURSE TEMPLATE_HEADERS ./resources/*.h.in)
+
+foreach (OLDFILE ${TEMPLATE_HEADERS})
+	get_filename_component(NEWFILE ${OLDFILE} NAME_WLE)
+
+	configure_file(${OLDFILE} ${GENERATED_HEADERS}/${NEWFILE})
+endforeach ()
 
 #---- Include Generated Headers
 include_directories(${GENERATED_HEADERS})
