@@ -59,10 +59,7 @@ void Gui::StyleFonts()
 {
 	ImGuiIO& io = ImGui::GetIO();
 
-	RudaBold10 = io.Fonts->AddFontFromMemoryTTF((void*)RUDA_BOLD, RUDA_BOLD_LEN, 10);
-	RudaBold12 = io.Fonts->AddFontFromMemoryTTF((void*)RUDA_BOLD, RUDA_BOLD_LEN, 12);
 	RudaBold14 = io.Fonts->AddFontFromMemoryTTF((void*)RUDA_BOLD, RUDA_BOLD_LEN, 14);
-	RudaBold18 = io.Fonts->AddFontFromMemoryTTF((void*)RUDA_BOLD, RUDA_BOLD_LEN, 18);
 
 	// Set Default.
 	io.FontDefault = RudaBold14;
