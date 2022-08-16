@@ -33,9 +33,8 @@ constexpr SDL_RendererFlags RENDERER_FLAGS = (SDL_RendererFlags)(
 	);
 
 /// @brief Attempts to initialize required SDL2 components.
-///@return A bool indicating whether or not initialization succeeded.
-bool InitializeSDL() noexcept
-{
+///	@return A bool indicating whether or not initialization succeeded.
+bool InitializeSDL() noexcept {
 	// Initialize required SDL subsystems.
 	if (SDL_Init(SDL_INIT_FLAGS) != 0)
 		return false;
@@ -79,8 +78,7 @@ bool InitializeSDL() noexcept
 
 /// @brief Attempts to initialize ImGui.
 /// @return A bool indicating whether or not initialization succeeded.
-bool InitializeImGui() noexcept
-{
+bool InitializeImGui() noexcept {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 
@@ -102,30 +100,26 @@ bool InitializeImGui() noexcept
 }
 
 /// @brief SDL Cleanup.
-void DestroySDL() noexcept
-{
+void DestroySDL() noexcept {
 	SDL_DestroyRenderer(g_renderer);
 	SDL_DestroyWindow(g_window);
 	SDL_Quit();
 }
 
 /// @brief ImGui Cleanup.
-void DestroyImGui() noexcept
-{
+void DestroyImGui() noexcept {
 	ImGui_ImplSDLRenderer_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 }
 
-void BeginRender() noexcept
-{
+void BeginRender() noexcept {
 	ImGui_ImplSDL2_NewFrame();
 	ImGui_ImplSDLRenderer_NewFrame();
 	ImGui::NewFrame();
 }
 
-void Render() noexcept
-{
+void Render() noexcept {
 	ImGui::SetNextWindowPos({ 0, 0 });
 	ImGui::SetNextWindowSize({ WINDOW_WIDTH, WINDOW_HEIGHT });
 
@@ -137,16 +131,14 @@ void Render() noexcept
 		| ImGuiWindowFlags_NoCollapse
 	);
 
-	if (ImGui::Button("Start Online", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 2) - 35))) 
-	{
+	if (ImGui::Button("Start Online", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 2) - 35))) {
 		// Start the original start_protected_game.exe file.
 		auto process = TinyProcessLib::Process("", "start_protected_game.exe");
 	}
 
 	ImGui::Separator();
 
-	if (ImGui::Button("Start Offline", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 2) - 35))) 
-	{
+	if (ImGui::Button("Start Offline", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 2) - 35))) {
 		// Start eldenring.exe
 		auto process = TinyProcessLib::Process("-eac-nop-loaded", "eldenring.exe");
 	}
@@ -154,21 +146,18 @@ void Render() noexcept
 	ImGui::End();
 }
 
-void EndRender() noexcept
-{
+void EndRender() noexcept {
 	ImGui::Render();
 	SDL_RenderClear(g_renderer);
 	ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
 	SDL_RenderPresent(g_renderer);
 }
 
-void Gui::Run()
-{
+void Gui::Run() {
 	if (!InitializeSDL() || !InitializeImGui())
 		return;
 
-	while (g_isOpen)
-	{
+	while (g_isOpen) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event))
 			ImGui_ImplSDL2_ProcessEvent(&event);

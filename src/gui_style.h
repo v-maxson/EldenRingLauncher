@@ -2,8 +2,7 @@
 
 #include <imgui.h>
 
-namespace Gui 
-{
+namespace Gui {
 	static ImFont* RudaBold14 = nullptr;
 
 	void StyleCustom();

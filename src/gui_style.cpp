@@ -1,8 +1,7 @@
 #include "gui_style.h"
 #include "RudaBold.h"
 
-void Gui::StyleCustom()
-{
+void Gui::StyleCustom() {
 	ImGuiStyle* style = &ImGui::GetStyle();
 
 	style->WindowPadding = ImVec2(15, 15);
@@ -55,8 +54,7 @@ void Gui::StyleCustom()
 	style->Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(1.00f, 0.98f, 0.95f, 0.73f); 
 }
 
-void Gui::StyleFonts()
-{
+void Gui::StyleFonts() {
 	ImGuiIO& io = ImGui::GetIO();
 
 	RudaBold14 = io.Fonts->AddFontFromMemoryTTF((void*)RUDA_BOLD, RUDA_BOLD_LEN, 14);

@@ -1,7 +1,6 @@
 #pragma once
 
-namespace Gui
-{
+namespace Gui {
 	/// @brief Runs the GUI loop.
 	void Run();
 }
