@@ -87,16 +87,16 @@ bool InitializeImGui() noexcept
 	ImGuiIO& io = ImGui::GetIO();
 	io.IniFilename = nullptr;
 
+	Gui::StyleCustom();
+
+	// This is currently causing a segmentation fault when the program exits. 
+	// Gui::StyleFonts();
+
 	if (!ImGui_ImplSDL2_InitForSDLRenderer(g_window, g_renderer))
 		return false;
 
 	if (!ImGui_ImplSDLRenderer_Init(g_renderer))
 		return false;
-
-	Gui::StyleCustom();
-
-	// This is currently causing a segmentation fault when the program exits. 
-	//Gui::StyleFonts(); 
 
 	return true;
 }
