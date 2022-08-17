@@ -6,7 +6,7 @@
 #include <imgui.h>
 #include <imgui_impl_sdl.h>
 #include <imgui_impl_sdlrenderer.h>
-#include <process.hpp>
+#include <boost/process.hpp>
 #include <cstdint>
 #include <thread>
 #include <format>
@@ -134,14 +134,28 @@ void Render() noexcept {
 
 	if (ImGui::Button("Start Online", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 2) - 35))) {
 		// Start the original start_protected_game.exe file.
-		auto process = TinyProcessLib::Process(std::vector<std::string>{ "start_protected_game_original.exe" }, "");
+
+		auto path = boost::process::search_path("start_protected_game_original.exe");
+		if (path == "") {
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", "Could not find 'start_protected_game_original.exe'!", nullptr);
+		}
+		else {
+			boost::process::spawn(path);
+		}
 	}
 
 	ImGui::Separator();
 
 	if (ImGui::Button("Start Offline", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 2) - 35))) {
 		// Start eldenring.exe
-		auto process = TinyProcessLib::Process(std::vector<std::string>{ "eldenring.exe", "-eac-nop-loaded" }, "");
+
+		auto path = boost::process::search_path("eldenring.exe");
+		if (path == "") {
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", "Could not find 'eldenring.exe'!", nullptr);
+		}
+		else {
+			boost::process::spawn(path, "-eac-nop-loaded");
+		}
 	}
 
 	ImGui::End();

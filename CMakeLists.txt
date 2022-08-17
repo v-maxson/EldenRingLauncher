@@ -34,12 +34,11 @@ file(GLOB IMGUI_SOURCE_FILES
 file(GLOB_RECURSE IMGUI_HEADERS ${IMGUI_DIRECTORY}/*.h)
 file(COPY ${IMGUI_HEADERS} DESTINATION ${GENERATED_HEADERS})
 
-#---- tiny-process-library
-add_subdirectory(./dependencies/tiny-process-library)
-include_directories(./dependencies/tiny-process-library)
-
 #---- Ruda Font
 include_directories(./dependencies/RudaFont/include)
+
+#---- Boost
+add_subdirectory(./dependencies/Boost)
 
 #---- Project Source
 file(GLOB_RECURSE SOURCE_FILES ./src/*.cpp ./src/*.h)
@@ -59,4 +58,4 @@ add_executable(${PROJECT_NAME} WIN32 ${SOURCE_FILES} ${IMGUI_SOURCE_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "start_protected_game")
 
 #---- Linking
-target_link_libraries(${PROJECT_NAME} SDL2main SDL2-static tiny-process-library)
+target_link_libraries(${PROJECT_NAME} SDL2main SDL2-static Boost::process)
