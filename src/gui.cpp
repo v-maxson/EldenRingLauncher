@@ -137,7 +137,7 @@ void Render() noexcept {
 
 		auto path = boost::process::search_path("start_protected_game_original.exe");
 		if (path == "") {
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", "Could not find 'start_protected_game_original.exe'!", nullptr);
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", "Could not find start_protected_game_original.exe.", nullptr);
 		}
 		else {
 			boost::process::spawn(path);
@@ -151,7 +151,7 @@ void Render() noexcept {
 
 		auto path = boost::process::search_path("eldenring.exe");
 		if (path == "") {
-			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", "Could not find 'eldenring.exe'!", nullptr);
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error!", "Could not find eldenring.exe.", nullptr);
 		}
 		else {
 			boost::process::spawn(path, "-eac-nop-loaded");
