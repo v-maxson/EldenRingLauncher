@@ -25,7 +25,7 @@ constexpr SDL_WindowFlags WINDOW_FLAGS = (SDL_WindowFlags)(
 	);
 constexpr const char* WINDOW_TITLE = "EldenRingLauncher";
 constexpr uint32_t WINDOW_WIDTH = 300;
-constexpr uint32_t WINDOW_HEIGHT = 150;
+constexpr uint32_t WINDOW_HEIGHT = 200;
 
 static SDL_Renderer* g_renderer = nullptr;
 constexpr SDL_RendererFlags RENDERER_FLAGS = (SDL_RendererFlags)(
@@ -132,7 +132,7 @@ void Render() noexcept {
 		| ImGuiWindowFlags_NoCollapse
 	);
 
-	if (ImGui::Button("Start Online", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 2) - 35))) {
+	if (ImGui::Button("Start Online", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 3) - 28))) {
 		// Start the original start_protected_game.exe file.
 
 		auto path = boost::process::search_path("start_protected_game_original.exe");
@@ -146,7 +146,26 @@ void Render() noexcept {
 
 	ImGui::Separator();
 
-	if (ImGui::Button("Start Offline", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 2) - 35))) {
+	if (ImGui::Button("Start Seamless Coop", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 3) - 28))) {
+		// Start eldenring.exe
+
+		auto path = boost::process::search_path("launch_elden_ring_seamlesscoop.exe");
+		if (path == "") {
+			SDL_ShowSimpleMessageBox(
+				SDL_MESSAGEBOX_ERROR,
+				"Error!",
+				"Could not find launch_elden_ring_seamlesscoop.exe.\n\n"
+				"Download the \"Seamless Coop\" mod from https://www.nexusmods.com/eldenring/mods/510",
+				nullptr);
+		}
+		else {
+			boost::process::spawn(path, "-eac-nop-loaded");
+		}
+	}
+
+	ImGui::Separator();
+
+	if (ImGui::Button("Start Offline", ImVec2(WINDOW_WIDTH - 27, (WINDOW_HEIGHT / 3) - 28))) {
 		// Start eldenring.exe
 
 		auto path = boost::process::search_path("eldenring.exe");
