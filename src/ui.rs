@@ -62,7 +62,7 @@ pub fn draw_ui(ui: &mut imgui::Ui, opened: &mut bool) {
             ui.separator();
 
             if ui.button_with_size("Start Offline", [(crate::WINDOW_WIDTH as f32) - 27.0, ((crate::WINDOW_HEIGHT as f32) / 3.0) - 28.0]) {
-                let path = Path::new("./SignatureMaker.exe");
+                let path = Path::new("./eldenring.exe");
 
                 if !path.exists() {
                     _ = native_dialog::MessageDialog::new()
