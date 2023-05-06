@@ -1,0 +1,52 @@
+use imgui::StyleColor;
+
+pub fn apply_custom_style(style: &mut imgui::Style) {
+    style.window_padding = [15.0, 15.0];
+    style.window_rounding = 0.0;
+    style.frame_padding = [5.0, 5.0];
+    style.frame_rounding = 2.0;
+    style.item_spacing = [12.0, 8.0];
+	style.item_inner_spacing = [8.0, 6.0];
+	style.indent_spacing = 25.0;
+	style.scrollbar_size = 15.0;
+	style.scrollbar_rounding = 9.0;
+	style.grab_min_size = 5.0;
+	style.grab_rounding = 3.0;
+
+    style.colors[StyleColor::Text as usize] = [0.80, 0.80, 0.83, 1.00];
+    style.colors[StyleColor::TextDisabled as usize] = [0.24, 0.23, 0.29, 1.00];
+    style.colors[StyleColor::WindowBg as usize] = [0.06, 0.05, 0.07, 1.00];
+    style.colors[StyleColor::ChildBg as usize] = [0.07, 0.07, 0.09, 1.00];
+    style.colors[StyleColor::PopupBg as usize] = [0.07, 0.07, 0.09, 1.00];
+    style.colors[StyleColor::Border as usize] = [0.80, 0.80, 0.83, 0.30];
+    style.colors[StyleColor::BorderShadow as usize] = [0.92, 0.91, 0.88, 0.00];
+    style.colors[StyleColor::FrameBg as usize] = [0.10, 0.09, 0.12, 1.00];
+    style.colors[StyleColor::FrameBgHovered as usize] = [0.24, 0.23, 0.29, 1.00];
+    style.colors[StyleColor::FrameBgActive as usize] = [0.56, 0.56, 0.58, 1.00];
+    style.colors[StyleColor::TitleBg as usize] = [0.10, 0.09, 0.12, 1.00];
+    style.colors[StyleColor::TitleBgCollapsed as usize] = [1.00, 0.98, 0.95, 0.75];
+    style.colors[StyleColor::TitleBgActive as usize] = [0.07, 0.07, 0.09, 1.00];
+    style.colors[StyleColor::MenuBarBg as usize] = [0.10, 0.09, 0.12, 1.00];
+    style.colors[StyleColor::ScrollbarBg as usize] = [0.10, 0.09, 0.12, 1.00];
+    style.colors[StyleColor::ScrollbarGrab as usize] = [0.80, 0.80, 0.83, 0.31];
+    style.colors[StyleColor::ScrollbarGrabHovered as usize] = [0.56, 0.56, 0.58, 1.00];
+    style.colors[StyleColor::ScrollbarGrabActive as usize] = [0.06, 0.05, 0.07, 1.00];
+    style.colors[StyleColor::CheckMark as usize] = [0.80, 0.80, 0.83, 0.31];
+    style.colors[StyleColor::SliderGrab as usize] = [0.80, 0.80, 0.83, 0.31];
+    style.colors[StyleColor::SliderGrabActive as usize] = [0.06, 0.05, 0.07, 1.00];
+    style.colors[StyleColor::Button as usize] = [0.10, 0.09, 0.12, 1.00];
+    style.colors[StyleColor::ButtonHovered as usize] = [0.24, 0.23, 0.29, 1.00];
+    style.colors[StyleColor::ButtonActive as usize] = [0.56, 0.56, 0.58, 1.00];
+    style.colors[StyleColor::Header as usize] = [0.10, 0.09, 0.12, 1.00];
+    style.colors[StyleColor::HeaderHovered as usize] = [0.56, 0.56, 0.58, 1.00];
+    style.colors[StyleColor::HeaderActive as usize] = [0.06, 0.05, 0.07, 1.00];
+    style.colors[StyleColor::ResizeGrip as usize] = [0.00, 0.00, 0.00, 0.00];
+    style.colors[StyleColor::ResizeGripHovered as usize] = [0.56, 0.56, 0.58, 1.00];
+    style.colors[StyleColor::ResizeGripActive as usize] = [0.06, 0.05, 0.07, 1.00];
+    style.colors[StyleColor::PlotLines as usize] = [0.40, 0.39, 0.38, 0.63];
+    style.colors[StyleColor::PlotLinesHovered as usize] = [0.25, 1.00, 0.00, 1.00];
+    style.colors[StyleColor::PlotHistogram as usize] = [0.40, 0.39, 0.38, 0.63];
+    style.colors[StyleColor::PlotHistogramHovered as usize] = [0.25, 1.00, 0.00, 1.00];
+    style.colors[StyleColor::TextSelectedBg as usize] = [0.25, 1.00, 0.00, 0.43];
+    style.colors[StyleColor::ModalWindowDimBg as usize] = [1.00, 0.98, 0.95, 0.73];
+}
