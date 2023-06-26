@@ -1,52 +1,18 @@
 #![windows_subsystem = "windows"]
 #![allow(non_camel_case_types)]
 
+mod constants;
 mod ui;
 mod style;
+mod panic_hook;
 
 use glow::HasContext;
 use std::ffi::c_void;
 use imgui_glow_renderer::AutoRenderer;
 use imgui_sdl2_support::*;
 use sdl2::{video::Window, event::Event, sys::{SDL_Window, SDL_Point, SDL_HitTestResult}};
-use static_init::*;
 use imgui::*;
-
-const WINDOW_TITLE: &str = "EldenRingLauncher";
-const WINDOW_WIDTH: u32 = 300;
-const WINDOW_HEIGHT: u32 = 200;
-const VERSION: &str = env!("CARGO_PKG_VERSION");
-const RUDA_BOLD: &[u8; 50472] = include_bytes!("../assets/Ruda-Bold.ttf");
-
-// Please don't hate me for this :)
-#[dynamic]
-static PANIC_HANDLER: () = {
-    std::panic::set_hook(
-        Box::new(|info| {
-            if let Some(error_message) = info.payload().downcast_ref::<&str>() {
-                _ = native_dialog::MessageDialog::new()
-                    .set_type(native_dialog::MessageType::Error)
-                    .set_text(
-                        format!("{} encountered an unexpected error: {}", 
-                        WINDOW_TITLE, 
-                        error_message
-                        ).as_str()
-                    )
-                    .show_alert();
-            } else {
-                _ = native_dialog::MessageDialog::new()
-                    .set_type(native_dialog::MessageType::Error)
-                    .set_text(
-                        format!("{} encountered an unexpected error: {}", 
-                        WINDOW_TITLE, 
-                        info.to_string()
-                        ).as_str()
-                    )
-                    .show_alert();
-            }
-        })
-    );
-};
+use constants::*;
 
 fn main() {
     fn glow_context(window: &Window) -> glow::Context {

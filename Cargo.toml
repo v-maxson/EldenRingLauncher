@@ -14,4 +14,4 @@ imgui = "0.11.0" # ImGui bindings
 imgui-sdl2-support = "0.11.0" # ImGui SDL support
 imgui-glow-renderer = "0.11.0" # ImGui glow renderer
 native-dialog = "0.6.3" # Native Message Boxes
-static_init = "1.0.3" # Lazy Statics
+ctor = "0.2.0" # __attribute__((constructor))
