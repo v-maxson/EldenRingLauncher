@@ -1,6 +1,9 @@
 # Elden Ring Launcher v3.0
 A simple utility to launch Elden Ring with or without anti-cheat.
 
+### Disclaimer
+I will no longer be updating this. For a more up-to-date version that also supports ModEngine2, check out Daniel2193's fork [here](https://github.com/Daniel2193/EldenRingLauncher).
+
 > Note: Version 3.0 (like 2.0), has no new functionality. I rewrote this program in Rust :).
 
 ## Installation
